@@ -18,10 +18,37 @@ class ProductController extends AbstractController
     /**
      * @Route("/", name="product_index", methods={"GET"})
      */
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, Request $request): Response
     {
+        $product = new Product();
+        $form = $this->createForm(ProductType::class, $product);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $picture = $form->get('Picture')->getData();
+
+            if ($picture) {
+                $newFilename = uniqid().'.'.$picture->guessExtension();
+
+                try {
+                    $picture->move(
+                        $this->getParameter('upload_dir'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', "Unable to upload file");
+                }
+                $product->setPicture($newFilename);
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($product);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('product_index');
+        }
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
+            'form' => $form->createView(),
         ]);
     }
 
@@ -35,6 +62,23 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $picture = $form->get('Picture')->getData();
+
+            if ($picture) {
+                $newFilename = uniqid().'.'.$picture->guessExtension();
+
+                try {
+                    $picture->move(
+                        $this->getParameter('upload_dir'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    $this->addFlash('error', "Unable to upload file");
+                }
+                $product->setPicture($newFilename);
+            }
+
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();

@@ -38,6 +38,9 @@
         {% endfor %}
         </tbody>
     </table>
+    {% if is_granted('ROLE_ADMIN') %}
+        <h2>Add a new Product</h2>
+        {{ include('product/_form.html.twig') }}
 
-    <a href="{{ path('product_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
