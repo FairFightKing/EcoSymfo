@@ -20,8 +20,10 @@ class CartController extends AbstractController
      */
     public function index(CartRepository $cartRepository): Response
     {
+        $cart = $cartRepository->findOneBy(['user' => $this->getUser(), 'Status' => false]);
+
         return $this->render('cart/index.html.twig', [
-            'carts' => $cartRepository->findAll(),
+            'cart' => $cart,
         ]);
     }
 
@@ -88,6 +90,29 @@ class CartController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($cart);
             $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('cart_index');
+    }
+
+    /**
+     * @Route("/purchase/{id}", name="cart_purchase",methods={"GET"})
+     */
+    public function purchase(Request $request , Cart $cart = null): Response
+    {
+        if ($cart) {
+            if ($cart->getStatus() == false) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $cart->setStatus(true);
+                $entityManager->persist($cart);
+                $entityManager->flush();
+                $this->addFlash('success', 'The purchase is OK');
+
+            } else {
+                $this->addFlash('error', 'This is already purchased');
+            }
+        } else {
+            $this->addFlash('error', 'This is not a Cart');
         }
 
         return $this->redirectToRoute('cart_index');

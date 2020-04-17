@@ -44,7 +44,7 @@ class Product
     private $Picture;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\CartContent", mappedBy="Products", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\CartContent", mappedBy="Product", orphanRemoval=true)
      */
     private $cartContents;
 
@@ -130,7 +130,7 @@ class Product
     {
         if (!$this->cartContents->contains($cartContent)) {
             $this->cartContents[] = $cartContent;
-            $cartContent->setProducts($this);
+            $cartContent->setProduct($this);
         }
 
         return $this;
@@ -141,8 +141,8 @@ class Product
         if ($this->cartContents->contains($cartContent)) {
             $this->cartContents->removeElement($cartContent);
             // set the owning side to null (unless already changed)
-            if ($cartContent->getProducts() === $this) {
-                $cartContent->setProducts(null);
+            if ($cartContent->getProduct() === $this) {
+                $cartContent->setProduct(null);
             }
         }
 

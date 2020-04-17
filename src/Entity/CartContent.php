@@ -37,11 +37,11 @@ class CartContent
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="cartContents")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Products;
+    private $Product;
 
     public function __construct()
     {
-        $this->Products = new ArrayCollection();
+        $this->Product = new ArrayCollection();
         $date = new \DateTime();
         $this->setAddedAt($date);
     }
@@ -87,14 +87,14 @@ class CartContent
         return $this;
     }
 
-    public function getProducts(): ?Product
+    public function getProduct(): ?Product
     {
-        return $this->Products;
+        return $this->Product;
     }
 
-    public function setProducts(?Product $Products): self
+    public function setProduct(?Product $Product): self
     {
-        $this->Products = $Products;
+        $this->Product = $Product;
 
         return $this;
     }

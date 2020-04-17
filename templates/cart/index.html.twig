@@ -8,30 +8,40 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>PurchasedAt</th>
-                <th>Status</th>
-                <th>actions</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
-        {% for cart in carts %}
+        {% if cart is not empty %}
+            {{ dump(cart) }}
+            {% for products in cart.cartContents %}
             <tr>
-                <td>{{ cart.id }}</td>
-                <td>{{ cart.PurchasedAt ? cart.PurchasedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ cart.Status ? 'Yes' : 'No' }}</td>
+                <td>{{ products.product.Name }}</td>
+                <td>{{ products.Quantity }}</td>
+                <td>{{ products.product.Price }}</td>
+                <td>{{ products.Quantity * products.product.price }}</td>
+
                 <td>
-                    <a href="{{ path('cart_show', {'id': cart.id}) }}">show</a>
-                    <a href="{{ path('cart_edit', {'id': cart.id}) }}">edit</a>
+                    <a href="{{ path('product_show', {'id': products.product.id}) }}">show</a>
+                    <a href="{{ path('cart_content_delete', {'id': cart.id}) }}">delete</a>
                 </td>
             </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+            <a href="{{ path('cart_purchase', {'id': cart.id}) }}">Purchase the cart</a>
+
         {% else %}
             <tr>
                 <td colspan="4">no records found</td>
             </tr>
-        {% endfor %}
         </tbody>
     </table>
+        {% endif %}
 
-    <a href="{{ path('cart_new') }}">Create new</a>
+
 {% endblock %}
