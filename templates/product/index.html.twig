@@ -25,10 +25,12 @@
                 <td>{{ product.Description }}</td>
                 <td>{{ product.Price }}</td>
                 <td>{{ product.Stock }}</td>
-                <td>{{ product.Picture }}</td>
+                <td><img src="{{ asset('/uploads/'~product.picture) }}" alt="" width="124px"></td>
                 <td>
                     <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
