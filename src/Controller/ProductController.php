@@ -98,7 +98,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}", name="product_show", methods={"GET","POST"})
      */
-    public function show(Product $product,Cart $cart=null, Request $request): Response
+    public function show(Product $product, Request $request): Response
     {
         $cartContent = new CartContent();
         $form = $this->createForm(CartContentType::class, $cartContent);
@@ -106,15 +106,17 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            $cart = $entityManager->getRepository(Cart::class)->findOneBy(['user' => $this->getUser(), 'Status' => false]);
+            if ($cart == null){
+                $cart = new Cart();
+                $cart->setUser($this->getUser());
+                $entityManager->persist($cart);
+                $entityManager->flush();
+            }
+            $cartContent->setCart($cart);
             $cartContent->setAddedAt(new \DateTime());
             $cartContent->setProducts($product);
-            $cartUser = $entityManager->getRepository(Cart::class)->findOneBy(['user' => $this->getUser(), 'Status' => false]);
-            if (!$cartUser){
-                $cart = new Cart();
-                $cartContent->setCart($cart);
-            }else {
-                $cartContent->setCart($cartUser);
-            }
             $entityManager->persist($cartContent);
             $entityManager->flush();
 
