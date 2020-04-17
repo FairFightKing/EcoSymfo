@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
+use App\Entity\CartContent;
 use App\Entity\Product;
+use App\Form\CartContentType;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -95,10 +98,27 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}", name="product_show", methods={"GET"})
      */
-    public function show(Product $product): Response
+    public function show(Product $product,Cart $cart=null, Request $request): Response
     {
+        $cartContent = new CartContent();
+        $form = $this->createForm(CartContentType::class, $cartContent);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $cartContent->setAddedAt(new \DateTime());
+            $cartContent->setProducts($product);
+            // TODO : $cartContent->setCart();
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($cartContent);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('cart_content_index');
+        }
+
         return $this->render('product/show.html.twig', [
             'product' => $product,
+            'form' => $form->createView()
         ]);
     }
 

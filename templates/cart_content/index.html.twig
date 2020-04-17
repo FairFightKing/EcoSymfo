@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CartContent index{% endblock %}
+
+{% block body %}
+    <h1>CartContent index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Quantity</th>
+                <th>AddedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cart_content in cart_contents %}
+            <tr>
+                <td>{{ cart_content.id }}</td>
+                <td>{{ cart_content.Quantity }}</td>
+                <td>{{ cart_content.AddedAt ? cart_content.AddedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('cart_content_show', {'id': cart_content.id}) }}">show</a>
+                    <a href="{{ path('cart_content_edit', {'id': cart_content.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('cart_content_new') }}">Create new</a>
+{% endblock %}
