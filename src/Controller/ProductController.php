@@ -96,7 +96,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="product_show", methods={"GET"})
+     * @Route("/{id}", name="product_show", methods={"GET","POST"})
      */
     public function show(Product $product,Cart $cart=null, Request $request): Response
     {
@@ -105,11 +105,16 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
             $cartContent->setAddedAt(new \DateTime());
             $cartContent->setProducts($product);
-            // TODO : $cartContent->setCart();
-
-            $entityManager = $this->getDoctrine()->getManager();
+            $cartUser = $entityManager->getRepository(Cart::class)->findOneBy(['user' => $this->getUser(), 'Status' => false]);
+            if (!$cartUser){
+                $cart = new Cart();
+                $cartContent->setCart($cart);
+            }else {
+                $cartContent->setCart($cartUser);
+            }
             $entityManager->persist($cartContent);
             $entityManager->flush();
 

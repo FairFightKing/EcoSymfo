@@ -53,9 +53,10 @@ class User implements UserInterface
     private $LastName;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Cart", mappedBy="User", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Cart", mappedBy="user", orphanRemoval=true)
      */
     private $carts;
+
 
     public function __construct()
     {
@@ -206,4 +207,5 @@ class User implements UserInterface
 
         return $this;
     }
+    
 }
