@@ -21,7 +21,7 @@ class CartController extends AbstractController
     public function index(CartRepository $cartRepository): Response
     {
         $cart = $cartRepository->findOneBy(['user' => $this->getUser(), 'Status' => false]);
-        if ($cart === null){
+        if ($cart === null && $this->getUser()){
             $cart = new Cart();
             $cart->setUser($this->getUser());
             $entityManager = $this->getDoctrine()->getManager();

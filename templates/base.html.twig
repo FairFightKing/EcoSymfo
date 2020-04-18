@@ -11,15 +11,15 @@
                 <p class="alert alert-{{ type }}">{{ type }} : {{ message }}</p>
             {% endfor %}
         {% endfor %}
-        <a href="{{ path('product_index') }}">HomePage</a> |
+         | <a href="{{ path('product_index') }}">HomePage</a> |
         {% if is_granted('ROLE_USER') %}
             <a href="{{ path('cart_index') }}">Cart</a> |
             <a href="{{ path('user_account', {'id' : app.user.id}) }}">Account</a> |
+            <a href="{{ path('app_logout') }}">Logout</a> |
             {% else %}
+                <p>| You are not logged in | </p>
                 <a href="{{ path('app_login') }}">Login</a> |
                 <a href="{{ path('app_register') }}">Register</a> |
-
-
         {% endif %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}

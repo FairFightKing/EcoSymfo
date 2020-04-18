@@ -108,7 +108,7 @@ class ProductController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
 
             $cart = $entityManager->getRepository(Cart::class)->findOneBy(['user' => $this->getUser(), 'Status' => false]);
-            if ($cart == null){
+            if ($cart === null && $this->getUser()){
                 $cart = new Cart();
                 $cart->setUser($this->getUser());
                 $entityManager->persist($cart);

@@ -15,7 +15,7 @@
             </tr>
         </thead>
         <tbody>
-        {% if cart.cartContents is not empty %}
+        {% if cart is not empty %}
             {% for products in cart.cartContents %}
             <tr>
                 <td>{{ products.product.Name }}</td>
