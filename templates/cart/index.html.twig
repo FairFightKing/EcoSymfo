@@ -15,8 +15,7 @@
             </tr>
         </thead>
         <tbody>
-        {% if cart is not empty %}
-            {{ dump(cart) }}
+        {% if cart.cartContents is not empty %}
             {% for products in cart.cartContents %}
             <tr>
                 <td>{{ products.product.Name }}</td>
@@ -32,9 +31,7 @@
             {% endfor %}
         </tbody>
     </table>
-
             <a href="{{ path('cart_purchase', {'id': cart.id}) }}">Purchase the cart</a>
-
         {% else %}
             <tr>
                 <td colspan="4">no records found</td>

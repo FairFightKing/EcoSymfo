@@ -21,6 +21,13 @@ class CartController extends AbstractController
     public function index(CartRepository $cartRepository): Response
     {
         $cart = $cartRepository->findOneBy(['user' => $this->getUser(), 'Status' => false]);
+        if ($cart === null){
+            $cart = new Cart();
+            $cart->setUser($this->getUser());
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($cart);
+            $entityManager->flush();
+        }
 
         return $this->render('cart/index.html.twig', [
             'cart' => $cart,
