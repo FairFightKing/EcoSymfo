@@ -17,22 +17,26 @@
         </thead>
         <tbody>
         {% if cart is not empty %}
+            {% set total = 0 %}
             {% for products in cart.cartContents %}
+                {% set rowPrice = products.Quantity * products.product.price %}
             <tr>
                 <td>{{ products.product.Name }}</td>
                 <td>{{ products.Quantity }}</td>
                 <td>{{ products.product.Price }}</td>
-                <td>{{ products.Quantity * products.product.price }}</td>
+                <td>{{ rowPrice }}</td>
 
                 <td>
                     <a href="{{ path('product_show', {'id': products.product.id}) }}">show</a>
                     {{ include('cart_content/_delete_form.html.twig', {'cart_content' : products}) }}
                 </td>
             </tr>
+                {% set total = total + rowPrice %}
             {% endfor %}
         </tbody>
     </table>
             {% if cart.Cartcontents is not empty %}
+                <p>Cart price is at {{ total }} euros</p>
             <a href="{{ path('cart_purchase', {'id': cart.id}) }}">Purchase the cart</a>
                 {% else %}
                     <tr>
