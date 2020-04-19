@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductController extends AbstractController
 {
     /**
-     * @Route("/", name="product_index", methods={"GET"})
+     * @Route("/", name="product_index", methods={"GET","POST"})
      */
     public function index(ProductRepository $productRepository, Request $request): Response
     {
@@ -121,7 +121,7 @@ class ProductController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Product Added to cart.');
-        } else {
+        } elseif ($form->isSubmitted()) {
             $this->addFlash('error', 'Form is not valid.');
 
         }
