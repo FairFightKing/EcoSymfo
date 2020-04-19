@@ -84,9 +84,10 @@ class CartController extends AbstractController
     public function purchase(Request $request , Cart $cart = null): Response
     {
         if ($cart) {
-            if ($cart->getStatus() == false) {
+            if ($cart->getStatus() === false) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $cart->setStatus(true);
+                $cart->setPurchasedAt(new \DateTime());
                 $entityManager->persist($cart);
                 $entityManager->flush();
                 $this->addFlash('success', 'The purchase is OK');

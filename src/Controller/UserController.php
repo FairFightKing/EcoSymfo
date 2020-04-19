@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\User;
 use App\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,12 +20,10 @@ class UserController extends AbstractController
      */
     public function index(User $user = null, Request $request, GuardAuthenticatorHandler $guardHandler, AppAuthAuthenticator $authenticator)
     {
-        if($user == null){
-            return $this->redirectToRoute('product_index');
-        }
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+        $entityManager = $this->getDoctrine()->getManager();
 
         if ($form->isSubmitted() && $form->isValid()) {
 
@@ -51,7 +50,6 @@ class UserController extends AbstractController
                 $user->setPicture($newFilename);
             }
 
-            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -64,9 +62,11 @@ class UserController extends AbstractController
                 'main' // firewall name in security.yaml
             );
         }
+        $carts = $entityManager->getRepository(Cart::class)->findByUser($user);
 
         return $this->render('user/index.html.twig', [
             'user' => $user,
+            'carts' => $carts,
             'form' => $form->createView()
         ]);
     }

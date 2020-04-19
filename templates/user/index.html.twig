@@ -4,7 +4,45 @@
 
 {% block body %}
     <h1>{{user.FirstName ~' '~ user.LastName}}</h1>
-
+    <hr/>
+    <h2>Update your profile</h2>
     {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+    <hr/>
+    <h2>Cart History</h2>
+
+<table class="table" border="1px" cellspacing="2px">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Price</th>
+            <th>Purchase Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for cart in carts %}
+        <tr>
+            <td>{{ cart.id }}</td>
+            <td>
+                {% set total = 0 %}
+                    {% for content in cart.CartContents %}
+                        {% set total = total + content.Quantity * content.Product.Price %}
+                    {% endfor %}
+                {{ total }}
+            </td>
+            <td>
+                {{ cart.purchasedAt ? cart.purchasedAt|date('Y-m-d H:i:s') : '' }}
+            </td>
+        {% if cart.CartContents is not empty %}
+            <td><a href="{{ path('cart_show', {'id' : cart.id}) }}">Show</a></td>
+            {% else %}
+            <td>Empty</td>
+        {% endif %}
+        </tr>
+
+    {% endfor %}
+    </tbody>
+</table>
+
 
 {% endblock %}

@@ -3,28 +3,51 @@
 {% block title %}Cart{% endblock %}
 
 {% block body %}
-    <h1>Cart</h1>
+    <h1>Cart Content</h1>
 
-    <table class="table">
-        <tbody>
+    <table class="table" border="1px" cellspacing="2px">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+        <th>Added to cart At</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% if cart is not empty %}
+        {% for products in cart.cartContents %}
             <tr>
-                <th>Id</th>
-                <td>{{ cart.id }}</td>
+                <td>{{ products.product.Name }}</td>
+                <td>{{ products.Quantity }}</td>
+                <td>{{ products.product.Price }}</td>
+                <td>{{ products.Quantity * products.product.price }}</td>
+                <td> {{ products.AddedAt ? products.AddedAt|date('Y-m-d H:i:s') : 'No add date found' }} </td>
+
+                <td>
+                    <a href="{{ path('product_show', {'id': products.product.id}) }}">show</a>
+                </td>
             </tr>
-            <tr>
-                <th>PurchasedAt</th>
-                <td>{{ cart.PurchasedAt ? cart.PurchasedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ cart.Status ? 'Yes' : 'No' }}</td>
-            </tr>
+        {% endfor %}
         </tbody>
-    </table>
+        </table>
+        <p> Cart purchased At : {{ cart.purchasedAt ? cart.purchasedAt|date('Y-m-d H:i:s') : 'Not purchased yet' }} </p>
 
-    <a href="{{ path('cart_index') }}">back to list</a>
 
-    <a href="{{ path('cart_edit', {'id': cart.id}) }}">edit</a>
-
-    {{ include('cart/_delete_form.html.twig') }}
+        {% if cart.Cartcontents is empty %}
+            <tr>
+                <td colspan="4">no records found, cart empty</td>
+            </tr>
+            </tbody>
+            </table>
+        {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="4">No cart</td>
+        </tr>
+        </tbody>
+        </table>
+    {% endif %}
 {% endblock %}
