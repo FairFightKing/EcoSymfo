@@ -35,30 +35,6 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="cart_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $cart = new Cart();
-        $form = $this->createForm(CartType::class, $cart);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $cart->setUser($this->getUser());
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($cart);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('cart_index');
-        }
-
-        return $this->render('cart/new.html.twig', [
-            'cart' => $cart,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="cart_show", methods={"GET"})
      */
     public function show(Cart $cart): Response

@@ -116,11 +116,14 @@ class ProductController extends AbstractController
             }
             $cartContent->setCart($cart);
             $cartContent->setAddedAt(new \DateTime());
-            $cartContent->setProducts($product);
+            $cartContent->setProduct($product);
             $entityManager->persist($cartContent);
             $entityManager->flush();
 
-            return $this->redirectToRoute('cart_content_index');
+            $this->addFlash('success', 'Product Added to cart.');
+        } else {
+            $this->addFlash('error', 'Form is not valid.');
+
         }
 
         return $this->render('product/show.html.twig', [

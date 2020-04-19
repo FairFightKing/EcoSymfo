@@ -89,6 +89,6 @@ class CartContentController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('cart_content_index');
+        return $this->redirectToRoute('cart_index');
     }
 }
