@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SuperAdminController!{% endblock %}
+{% block title %}{{ 'superAdmin'|trans }}{% endblock %}
 
 {% block body %}
 
-    <h2>All users ordered by newest</h2>
+    <h2>{{ 'users'|trans }}</h2>
     <ul>
     {% for user in users %}
         <li>{{ user.Email }}</li>
@@ -12,14 +12,14 @@
     </ul>
     <hr/>
 
-    <h2>All unpaid carts</h2>
+    <h2>{{ 'unpaidCart'|trans }}</h2>
 
     <table border="1px">
         <thead>
         <tr>
-            <th>Owner</th>
-            <th>Id</th>
-            <th>Content</th>
+            <th>{{ 'owner'|trans }}</th>
+            <th>{{ 'id'|trans }}</th>
+            <th>{{ 'content'|trans }}</th>
         </tr>
         </thead>
 

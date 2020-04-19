@@ -17,7 +17,6 @@ class CartContentType extends AbstractType
             ->add('Quantity', NumberType::class, [
                 'required' => true,
             ])
-            ->add('Add', SubmitType::class)
         ;
     }
 

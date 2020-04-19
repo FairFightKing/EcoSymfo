@@ -1,0 +1,90 @@
+menu:
+  homePage: "Page d'accueil"
+  language: 'Changer la langue'
+  account: 'Compte'
+  logout: 'Deconnexion'
+  login: 'Connexion'
+  update: 'Mettre a jour'
+  delete: 'Supprimer'
+  save: 'sauvegarder'
+  empty: 'Vide'
+  register: "S'enregistrer"
+  signin: 'se connecter'
+
+product:
+  title: 'Liste des produits'
+  new: 'Ajouter un produit'
+  empty: "Il n'y as pas de produit"
+  notFound: 'Produit pas trouver'
+  deleted: 'Produit supprimer'
+  add: 'Ajouter au panier'
+  added: 'Produit ajouter au panier'
+  delete: 'Supprimer ce produit'
+  edit: 'Modifier ce produit'
+
+cart:
+  name: 'Panier'
+  add: 'Ajouter au panier'
+  title: 'Votre panier'
+  empty: 'Panier vide'
+  notFound: "Il n'y as pas de panier"
+  deleted: 'Panier supprimer'
+  remove: 'Enlever'
+  removetitle: 'Enlever ce produit du panier'
+  purchase: 'Acheter le panier'
+  price: 'Le prix du panier est de'
+  addedAt: 'ajoute au panier le'
+  show: 'Votre panier'
+  edit: 'modifier le panier'
+  history: 'Historique du panier'
+
+profile:
+  update: 'Mettre a jour le profile'
+  title: 'Votre profile'
+  history: 'Historique des paniers'
+
+name: 'Nom'
+Name: 'Nom'
+picture: 'Photo'
+Product Picture: 'Photo'
+id: 'id'
+actions: 'actions'
+firstname: 'Prenom'
+lastname: 'Nom de famille'
+email: 'Email'
+Email: 'Email'
+password: 'Mot de passe'
+user: 'Utilisateur'
+purchasedAt: 'Acheter a'
+description: 'Description'
+Description: 'Description'
+stock: 'Stock'
+Stock: 'Stock'
+quantity: 'Quantite'
+price: 'Prix'
+Price: 'Prix'
+the image of the Product: "l'image du produit"
+save: 'Sauvegarder'
+admin: "Vous etes admin"
+superAdmin: "vous etes Super Admin"
+loggedOut: "Vous n'etes pas connecte"
+loggedin: "Vous etes connecte"
+unpaidCart: 'Tout les panier non payer et leurs proprietaire'
+users: 'Tout les utilisateurs du plus recent'
+confirmDelete: 'Etes vous sur de supprimer cette element'
+owner: 'pocesseur'
+content: 'contenu'
+notLogged: 'pas connecter'
+show: 'Voir'
+edit: 'Modifier'
+First name: 'Prenom'
+Last name: 'Nom'
+Profile Picture: 'Photo de profil'
+empty: 'vide'
+total: 'totale'
+delete: 'Supprimer'
+Quantity: 'Quantite'
+register: 'enregistrer'
+Plain password: 'Mot de passe'
+Agree terms: 'termes'
+signin: 'se connecter'

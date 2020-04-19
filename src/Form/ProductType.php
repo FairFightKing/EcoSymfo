@@ -35,7 +35,6 @@ class ProductType extends AbstractType
                     ])
                 ],
             ])
-            ->add('save', SubmitType::class)
 
         ;
     }

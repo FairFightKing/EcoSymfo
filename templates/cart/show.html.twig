@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Cart{% endblock %}
+{% block title %}{{ 'cart.show'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Cart Content</h1>
+    <h1>{{ 'cart.show'|trans }}</h1>
 
     <table class="table" border="1px" cellspacing="2px">
     <thead>
     <tr>
-        <th>Name</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Total</th>
-        <th>Added to cart At</th>
-        <th>Actions</th>
+        <th>{{ 'name'|trans }}</th>
+        <th>{{ 'quantity'|trans }}</th>
+        <th>{{ 'price'|trans }}</th>
+        <th>{{ 'total'|trans }}</th>
+        <th>{{ 'cart.addedAt'|trans }}</th>
+        <th>{{ 'actions'|trans }}</th>
     </tr>
     </thead>
     <tbody>
@@ -27,25 +27,25 @@
                 <td> {{ products.AddedAt ? products.AddedAt|date('Y-m-d H:i:s') : 'No add date found' }} </td>
 
                 <td>
-                    <a href="{{ path('product_show', {'id': products.product.id}) }}">show</a>
+                    <a href="{{ path('product_show', {'id': products.product.id}) }}">{{ 'show'|trans }}</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
         </table>
-        <p> Cart purchased At : {{ cart.purchasedAt ? cart.purchasedAt|date('Y-m-d H:i:s') : 'Not purchased yet' }} </p>
+        <p> {{ 'purchasedAt'|trans}} {{ cart.purchasedAt ? cart.purchasedAt|date('Y-m-d H:i:s') : 'Not purchased yet' }} </p>
 
 
         {% if cart.Cartcontents is empty %}
             <tr>
-                <td colspan="4">no records found, cart empty</td>
+                <td colspan="4">{{ 'cart.empty'|trans }}</td>
             </tr>
             </tbody>
             </table>
         {% endif %}
     {% else %}
         <tr>
-            <td colspan="4">No cart</td>
+            <td colspan="4">{{ 'cart.empty'|trans }}</td>
         </tr>
         </tbody>
         </table>

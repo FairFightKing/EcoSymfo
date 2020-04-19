@@ -15,51 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CartContentController extends AbstractController
 {
-    /**
-     * @Route("/", name="cart_content_index", methods={"GET"})
-     */
-    public function index(CartContentRepository $cartContentRepository): Response
-    {
-        return $this->render('cart_content/index.html.twig', [
-            'cart_contents' => $cartContentRepository->findAll(),
-        ]);
-    }
-
-    /**
-     * @Route("/new", name="cart_content_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $cartContent = new CartContent();
-        $form = $this->createForm(CartContentType::class, $cartContent);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($cartContent);
-            $entityManager->flush();
-
-            $this->addFlash('success','created a new cart');
-            return $this->redirectToRoute('cart_content_index');
-        } elseif($form->isSubmitted()){
-            $this->addFlash('error','form is not valid');
-        }
-
-        return $this->render('cart_content/new.html.twig', [
-            'cart_content' => $cartContent,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="cart_content_show", methods={"GET"})
-     */
-    public function show(CartContent $cartContent): Response
-    {
-        return $this->render('cart_content/show.html.twig', [
-            'cart_content' => $cartContent,
-        ]);
-    }
 
     /**
      * @Route("/{id}/edit", name="cart_content_edit", methods={"GET","POST"})

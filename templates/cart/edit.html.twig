@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Cart{% endblock %}
+{% block title %}{{ 'cart.edit'|trans }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Cart</h1>
+    <h1>{{ 'cart.edit'|trans }}</h1>
 
     {{ include('cart/_form.html.twig', {'button_label': 'Update'}) }}
 

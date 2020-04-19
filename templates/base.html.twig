@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}{{ 'menu.homePage'|trans }}{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -11,21 +11,21 @@
                 <p class="alert alert-{{ type }}">{{ type }} : {{ message }}</p>
             {% endfor %}
         {% endfor %}
-         | <a href="{{ path('product_index') }}">HomePage</a> |
+         | <a href="{{ path('product_index') }}">{{ 'menu.homePage'|trans }}</a> |
         {% if is_granted('ROLE_USER') %}
-            <a href="{{ path('cart_index') }}">Cart</a> |
-            <a href="{{ path('user_account', {'id' : app.user.id}) }}">Account</a> |
-            <a href="{{ path('app_logout') }}">Logout</a> |
+            <a href="{{ path('cart_index') }}">{{ 'cart.name'|trans }}</a> |
+            <a href="{{ path('user_account', {'id' : app.user.id}) }}">{{ 'menu.account'|trans }}</a> |
+            <a href="{{ path('app_logout') }}">{{ 'menu.logout'|trans }}</a> |
             {% else %}
-                <p>| You are not logged in | </p>
-                <a href="{{ path('app_login') }}">Login</a> |
-                <a href="{{ path('app_register') }}">Register</a> |
+                <p>| {{ 'notLogged'|trans}} | </p>
+                <a href="{{ path('app_login') }}">{{ 'menu.login'|trans }}</a> |
+                <a href="{{ path('app_register') }}">{{ 'menu.register'|trans }}</a> |
         {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
-        <p> You're admin</p>
+        <p> {{ 'admin'|trans }}</p>
         {% endif %}
         {% if is_granted('ROLE_SUPER_ADMIN') %}
-            <a href="{{ path('super_admin') }}">Super Admin page</a>
+            <a href="{{ path('super_admin') }}">{{ 'superAdmin'|trans }}</a>
         {% endif %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}

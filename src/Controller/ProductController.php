@@ -59,49 +59,6 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="product_new", methods={"GET","POST"})
-     */
-    public function new(Request $request): Response
-    {
-        $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $picture = $form->get('Picture')->getData();
-
-            if ($picture) {
-                $newFilename = uniqid().'.'.$picture->guessExtension();
-
-                try {
-                    $picture->move(
-                        $this->getParameter('upload_dir'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                    $this->addFlash('error', "Unable to upload file");
-                }
-                $product->setPicture($newFilename);
-            }
-
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
-            $entityManager->flush();
-            $this->addFlash('success','created new product');
-
-            return $this->redirectToRoute('product_index');
-        }elseif($form->isSubmitted()){
-            $this->addFlash('error','form not valid');
-        }
-
-        return $this->render('product/new.html.twig', [
-            'product' => $product,
-            'form' => $form->createView(),
-        ]);
-    }
-
-    /**
      * @Route("/{id}", name="product_show", methods={"GET","POST"})
      */
     public function show(Product $product, Request $request): Response
