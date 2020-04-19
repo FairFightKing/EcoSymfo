@@ -27,10 +27,13 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $picture = $form->get('Picture')->getData();
-
+            // this condition is needed because the 'Picture' field is not required
+            // so the image file must be processed only when a file is uploaded
+            // if the picture field is filled, rename the file and move it to the right directory
             if ($picture) {
                 $newFilename = uniqid().'.'.$picture->guessExtension();
 
+                // Move the file to the directory where pictures are stored
                 try {
                     $picture->move(
                         $this->getParameter('upload_dir'),
@@ -39,6 +42,8 @@ class RegistrationController extends AbstractController
                 } catch (FileException $e) {
                     $this->addFlash('error', $translator->trans('flash.uploadFile'));
                 }
+                // updates the 'pictureFileName' property to store the image file name
+                // instead of its contents
                 $user->setPicture($newFilename);
             }
 

@@ -42,6 +42,7 @@ class CartContent
     public function __construct()
     {
         $this->Product = new ArrayCollection();
+        // set the date when the product is added to the cart
         $date = new \DateTime();
         $this->setAddedAt($date);
     }

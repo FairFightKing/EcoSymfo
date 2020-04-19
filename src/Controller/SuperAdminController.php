@@ -15,7 +15,9 @@ class SuperAdminController extends AbstractController
     public function index()
     {
         $entityManager = $this->getDoctrine()->getManager();
+        // Request all the Users and ordered by ID wich the higher equal the sooner
         $users = $entityManager->getRepository(User::class)->findBy([],['id' => 'DESC']);
+        // Request all the unpaid carts
         $unpaidCarts = $entityManager->getRepository(Cart::class)->findBy(['Status' => false]);
 
         return $this->render('super_admin/index.html.twig', [

@@ -30,9 +30,12 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $picture = $form->get('Picture')->getData();
-
+            // this condition is needed because the 'Picture' field is not required
+            // so the image file must be processed only when a file is uploaded
+            // if the picture field is filled, rename the file and move it to the right directory
             if ($picture) {
                 $newFilename = uniqid().'.'.$picture->guessExtension();
+                // Move the file to the directory where pictures are stored
 
                 try {
                     $picture->move(
@@ -42,8 +45,11 @@ class ProductController extends AbstractController
                 } catch (FileException $e) {
                     $this->addFlash('error',$translator->trans('flash.uploadFile'));
                 }
+                // updates the 'pictureFileName' property to store the image file name
+                // instead of its contents
                 $product->setPicture($newFilename);
             }
+            // save the product
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
@@ -70,17 +76,20 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-
+            // Request the unpaid cart form the user
             $cart = $entityManager->getRepository(Cart::class)->findOneBy(['user' => $this->getUser(), 'Status' => false]);
+            // If theres none, create a new empty one
             if ($cart === null && $this->getUser()){
                 $cart = new Cart();
                 $cart->setUser($this->getUser());
                 $entityManager->persist($cart);
                 $entityManager->flush();
             }
+            // Create a new row with the corresponding fields
             $cartContent->setCart($cart);
             $cartContent->setAddedAt(new \DateTime());
             $cartContent->setProduct($product);
+            // save the cart content
             $entityManager->persist($cartContent);
             $entityManager->flush();
 
@@ -104,8 +113,8 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // update the product
             $this->getDoctrine()->getManager()->flush();
-
             $this->addFlash('success',$translator->trans('flash.ProductUpdated'));
             return $this->redirectToRoute('product_index');
         }elseif($form->isSubmitted()){
@@ -124,6 +133,7 @@ class ProductController extends AbstractController
     public function delete(Request $request, Product $product, TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+            // delete the product
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);
             $entityManager->flush();

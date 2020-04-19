@@ -43,6 +43,7 @@ class Cart
     public function __construct()
     {
         $this->cartContents = new ArrayCollection();
+        // set the default status to false
         $this->setStatus(false);
 
     }

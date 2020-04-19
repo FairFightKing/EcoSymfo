@@ -21,10 +21,14 @@ class CartController extends AbstractController
      */
     public function index(CartRepository $cartRepository): Response
     {
+        // Request the cart that is not paid yet by this user
         $cart = $cartRepository->findOneBy(['user' => $this->getUser(), 'Status' => false]);
+        // If theres none, create a new empty one
         if ($cart === null && $this->getUser()){
             $cart = new Cart();
+            //link the user to the new cart
             $cart->setUser($this->getUser());
+            // save the cart
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($cart);
             $entityManager->flush();
@@ -54,9 +58,9 @@ class CartController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // update the cart
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success',$translator->trans('flash.cartUpdated'));
-
             return $this->redirectToRoute('cart_index');
         } elseif ($form->isSubmitted()){
             $this->addFlash('error',$translator->trans('flash.formNotValid'));
@@ -74,6 +78,7 @@ class CartController extends AbstractController
     public function delete(Request $request, Cart $cart, TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$cart->getId(), $request->request->get('_token'))) {
+            // remove the cart
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($cart);
             $entityManager->flush();
@@ -88,11 +93,14 @@ class CartController extends AbstractController
      */
     public function purchase(Cart $cart = null, TranslatorInterface $translator): Response
     {
+        // If a cart exist and if it unpaid
         if ($cart) {
             if ($cart->getStatus() === false) {
                 $entityManager = $this->getDoctrine()->getManager();
+                // change the status of the cart to be paid and the time its been paid and update database
                 $cart->setStatus(true);
                 $cart->setPurchasedAt(new \DateTime());
+                // save the changes
                 $entityManager->persist($cart);
                 $entityManager->flush();
                 $this->addFlash('success', $translator->trans('flash.purchaseOk'));

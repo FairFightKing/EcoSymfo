@@ -26,6 +26,7 @@ class CartContentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // update the cart content
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success',$translator->trans('flash.cartUpdate'));
             return $this->redirectToRoute('cart_content_index');
@@ -45,6 +46,7 @@ class CartContentController extends AbstractController
     public function delete(Request $request, CartContent $cartContent, TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$cartContent->getId(), $request->request->get('_token'))) {
+            // delete the cart
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($cartContent);
             $entityManager->flush();
