@@ -12,13 +12,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use App\Security\AppAuthAuthenticator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UserController extends AbstractController
 {
     /**
-     * @Route("/user/{id}", name="user_account")
+     * @Route("/{_locale}/user/{id}", name="user_account")
      */
-    public function index(User $user = null, Request $request, GuardAuthenticatorHandler $guardHandler, AppAuthAuthenticator $authenticator)
+    public function index(User $user = null, Request $request, GuardAuthenticatorHandler $guardHandler, AppAuthAuthenticator $authenticator, TranslatorInterface $translator)
     {
 
         $form = $this->createForm(UserType::class, $user);
@@ -42,7 +43,7 @@ class UserController extends AbstractController
                     );
                 } catch (FileException $e) {
                     // ... handle exception if something happens during file upload
-                    $this->addFlash('error', "Impossible d'uplaoder le fichier");
+                    $this->addFlash('error', $translator->trans('flash.uploadFile'));
                 }
 
                 // updates the 'brochureFilename' property to store the PDF file name
@@ -53,7 +54,7 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('success','Profile updated');
+            $this->addFlash('success',$translator->trans('flash.profileUpdated'));
             // do anything else you need here, like send an email
 
             return $guardHandler->authenticateUserAndHandleSuccess(

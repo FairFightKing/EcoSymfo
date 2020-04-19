@@ -12,16 +12,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/product")
+ * @Route("/{_locale}/product")
  */
 class ProductController extends AbstractController
 {
     /**
      * @Route("/", name="product_index", methods={"GET","POST"})
      */
-    public function index(ProductRepository $productRepository, Request $request): Response
+    public function index(ProductRepository $productRepository, Request $request, TranslatorInterface $translator): Response
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -39,18 +40,18 @@ class ProductController extends AbstractController
                         $newFilename
                     );
                 } catch (FileException $e) {
-                    $this->addFlash('error', "Unable to upload file");
+                    $this->addFlash('error',$translator->trans('flash.uploadFile'));
                 }
                 $product->setPicture($newFilename);
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
-            $this->addFlash('success','created new product');
+            $this->addFlash('success',$translator->trans('flash.newProduct'));
 
             return $this->redirectToRoute('product_index');
         }elseif ($form->isSubmitted()){
-            $this->addFlash('error','form not valid');
+            $this->addFlash('error',$translator->trans('flash.formNotValid'));
         }
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
@@ -61,7 +62,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}", name="product_show", methods={"GET","POST"})
      */
-    public function show(Product $product, Request $request): Response
+    public function show(Product $product, Request $request, TranslatorInterface $translator): Response
     {
         $cartContent = new CartContent();
         $form = $this->createForm(CartContentType::class, $cartContent);
@@ -83,9 +84,9 @@ class ProductController extends AbstractController
             $entityManager->persist($cartContent);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Product Added to cart.');
+            $this->addFlash('success', $translator->trans('flash.productAdd'));
         } elseif ($form->isSubmitted()) {
-            $this->addFlash('error', 'Form is not valid.');
+            $this->addFlash('error', $translator->trans('flash.formNotValid'));
         }
 
         return $this->render('product/show.html.twig', [
@@ -97,7 +98,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}/edit", name="product_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Product $product): Response
+    public function edit(Request $request, Product $product, TranslatorInterface $translator): Response
     {
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
@@ -105,10 +106,10 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success','Product updated');
+            $this->addFlash('success',$translator->trans('flash.ProductUpdated'));
             return $this->redirectToRoute('product_index');
         }elseif($form->isSubmitted()){
-            $this->addFlash('error','form not valid');
+            $this->addFlash('error',$translator->trans('flash.formNotValid'));
         }
 
         return $this->render('product/edit.html.twig', [
@@ -120,13 +121,13 @@ class ProductController extends AbstractController
     /**
      * @Route("/{id}", name="product_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Product $product): Response
+    public function delete(Request $request, Product $product, TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);
             $entityManager->flush();
-            $this->addFlash('success','Product deleted');
+            $this->addFlash('success',$translator->trans('flash.productDeleted'));
         }
 
         return $this->redirectToRoute('product_index');

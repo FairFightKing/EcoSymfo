@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class SuperAdminController extends AbstractController
 {
     /**
-     * @Route("/superadmin", name="super_admin")
+     * @Route("/{_locale}/superadmin", name="super_admin")
      */
     public function index()
     {

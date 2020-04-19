@@ -9,9 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/cart/content")
+ * @Route("/{_locale}/cart/content")
  */
 class CartContentController extends AbstractController
 {
@@ -19,17 +20,17 @@ class CartContentController extends AbstractController
     /**
      * @Route("/{id}/edit", name="cart_content_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, CartContent $cartContent): Response
+    public function edit(Request $request, CartContent $cartContent, TranslatorInterface $translator): Response
     {
         $form = $this->createForm(CartContentType::class, $cartContent);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success','Cart updated');
+            $this->addFlash('success',$translator->trans('flash.cartUpdate'));
             return $this->redirectToRoute('cart_content_index');
         } elseif ($form->isSubmitted()){
-            $this->addFlash('error','form not valid');
+            $this->addFlash('error',$translator->trans('flash.formNotValid'));
         }
 
         return $this->render('cart_content/edit.html.twig', [
@@ -41,13 +42,13 @@ class CartContentController extends AbstractController
     /**
      * @Route("/{id}", name="cart_content_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, CartContent $cartContent): Response
+    public function delete(Request $request, CartContent $cartContent, TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$cartContent->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($cartContent);
             $entityManager->flush();
-            $this->addFlash('success','cart deleted');
+            $this->addFlash('success',$translator->trans('flash.cartDeleted'));
         }
 
         return $this->redirectToRoute('cart_index');

@@ -24,7 +24,7 @@
                 <td>{{ products.Quantity }}</td>
                 <td>{{ products.product.Price }}</td>
                 <td>{{ products.Quantity * products.product.price }}</td>
-                <td> {{ products.AddedAt ? products.AddedAt|date('Y-m-d H:i:s') : 'No add date found' }} </td>
+                <td> {{ products.AddedAt ? products.AddedAt|date('Y-m-d H:i:s') : 'noDate'|trans }} </td>
 
                 <td>
                     <a href="{{ path('product_show', {'id': products.product.id}) }}">{{ 'show'|trans }}</a>
@@ -33,7 +33,7 @@
         {% endfor %}
         </tbody>
         </table>
-        <p> {{ 'purchasedAt'|trans}} {{ cart.purchasedAt ? cart.purchasedAt|date('Y-m-d H:i:s') : 'Not purchased yet' }} </p>
+        <p> {{ 'purchasedAt'|trans}} {{ cart.purchasedAt ? cart.purchasedAt|date('Y-m-d H:i:s') : 'notPurchased'|trans }} </p>
 
 
         {% if cart.Cartcontents is empty %}

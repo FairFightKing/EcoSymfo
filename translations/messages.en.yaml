@@ -11,7 +11,7 @@ menu:
   register: "Register"
   signin: 'sign in'
 
-product:
+Product:
   title: 'Products list'
   new: 'Add a new Product'
   empty: "There's no products"
@@ -43,6 +43,20 @@ profile:
   title: 'Your profile'
   history: 'Cart History'
 
+flash:
+  cartUpdate: 'Cart Updated'
+  fromNotValid: 'The form is not valid, either not working or not filled properly'
+  cartDeleted: 'Product Deleted from this cart'
+  cartUpdated: 'Cart Updated'
+  newProduct: 'Created a new product'
+  uploadFile: 'Unable to Upload File'
+  productAdd: 'Product added to cart'
+  productUpdated: 'Product updated'
+  productDeleted: 'Product delted'
+  profileUpdated: 'Profile Updated'
+  purchaseOk: 'Purchase went well'
+  cartAlreadyPurchased: 'Your cart has already been purchased'
+  notACart: 'This cart does not exist'
 name: 'Name'
 Name: 'Name'
 picture: 'picture'
@@ -93,3 +107,6 @@ errorText: 'An error occured, please ty again'
 403: 'No right to be here'
 404: 'Page not found'
 500: 'Not working'
+notPurchased: 'Not purchased yet'
+noDate: 'No date found'
+product: 'Product'

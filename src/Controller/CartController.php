@@ -9,9 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * @Route("/cart")
+ * @Route("/{_locale}/cart")
  */
 class CartController extends AbstractController
 {
@@ -47,18 +48,18 @@ class CartController extends AbstractController
     /**
      * @Route("/{id}/edit", name="cart_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Cart $cart): Response
+    public function edit(Request $request, Cart $cart, TranslatorInterface $translator): Response
     {
         $form = $this->createForm(CartType::class, $cart);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success','Cart updated');
+            $this->addFlash('success',$translator->trans('flash.cartUpdated'));
 
             return $this->redirectToRoute('cart_index');
         } elseif ($form->isSubmitted()){
-            $this->addFlash('error','form not valid');
+            $this->addFlash('error',$translator->trans('flash.formNotValid'));
         }
 
         return $this->render('cart/edit.html.twig', [
@@ -70,13 +71,13 @@ class CartController extends AbstractController
     /**
      * @Route("/{id}", name="cart_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, Cart $cart): Response
+    public function delete(Request $request, Cart $cart, TranslatorInterface $translator): Response
     {
         if ($this->isCsrfTokenValid('delete'.$cart->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($cart);
             $entityManager->flush();
-            $this->addFlash('success','deleted the cart');
+            $this->addFlash('success',$translator->trans('flash.formNotValid'));
         }
 
         return $this->redirectToRoute('cart_index');
@@ -85,7 +86,7 @@ class CartController extends AbstractController
     /**
      * @Route("/purchase/{id}", name="cart_purchase",methods={"GET"})
      */
-    public function purchase(Request $request , Cart $cart = null): Response
+    public function purchase(Cart $cart = null, TranslatorInterface $translator): Response
     {
         if ($cart) {
             if ($cart->getStatus() === false) {
@@ -94,13 +95,13 @@ class CartController extends AbstractController
                 $cart->setPurchasedAt(new \DateTime());
                 $entityManager->persist($cart);
                 $entityManager->flush();
-                $this->addFlash('success', 'The purchase is OK');
+                $this->addFlash('success', $translator->trans('flash.purchaseOk'));
 
             } else {
-                $this->addFlash('error', 'This is already purchased');
+                $this->addFlash('error', $translator->trans('flash.cartAlreadyPurchased'));
             }
         } else {
-            $this->addFlash('error', 'This is not a Cart');
+            $this->addFlash('error', $translator->trans('flash.notACart'));
         }
 
         return $this->redirectToRoute('cart_index');

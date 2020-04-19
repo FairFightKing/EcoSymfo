@@ -11,7 +11,7 @@ menu:
   register: "S'enregistrer"
   signin: 'se connecter'
 
-product:
+Product:
   title: 'Liste des produits'
   new: 'Ajouter un produit'
   empty: "Il n'y as pas de produit"
@@ -43,6 +43,20 @@ profile:
   title: 'Votre profile'
   history: 'Historique des paniers'
 
+flash:
+  cartUpdate: 'Panier mit a jour'
+  formNotValid: "Le formulaire ne marche pas ou est mal renseigner"
+  cartDeleted: 'Produit du panier supprimer'
+  cartUpdated: 'Panier mit a jour'
+  newProduct: "Creation d'un nouveaux produit"
+  uploadFile: 'Impossible de telecharger le fichier'
+  productAdd: 'Produit ajoute au panier'
+  productUpdated: 'Produit Mit a jour'
+  productDeleted: 'Produit Supprimer'
+  profileUpdated: 'Profile mit a jour'
+  purchaseOk: 'Vous avez bien acheter le panier'
+  cartAlreadyPurchased: 'Ce panier est deja payer'
+  notACart: "ce panier n'existe pas"
 name: 'Nom'
 Name: 'Nom'
 picture: 'Photo'
@@ -93,3 +107,6 @@ errorText: 'Une erreur est survenue, merci de réessayer ultérieurement.'
 403: "Pas le droit d'etre ici"
 404: 'Page non trouve'
 500: 'Ne fonctionne pas'
+notPurchased: 'Pas encore acheter'
+noDate: 'Pas de date'
+product: 'Produit'
