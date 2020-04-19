@@ -46,8 +46,11 @@ class ProductController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
+            $this->addFlash('success','created new product');
 
             return $this->redirectToRoute('product_index');
+        }elseif ($form->isSubmitted()){
+            $this->addFlash('error','form not valid');
         }
         return $this->render('product/index.html.twig', [
             'products' => $productRepository->findAll(),
@@ -85,8 +88,11 @@ class ProductController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
+            $this->addFlash('success','created new product');
 
             return $this->redirectToRoute('product_index');
+        }elseif($form->isSubmitted()){
+            $this->addFlash('error','form not valid');
         }
 
         return $this->render('product/new.html.twig', [
@@ -123,7 +129,6 @@ class ProductController extends AbstractController
             $this->addFlash('success', 'Product Added to cart.');
         } elseif ($form->isSubmitted()) {
             $this->addFlash('error', 'Form is not valid.');
-
         }
 
         return $this->render('product/show.html.twig', [
@@ -143,7 +148,10 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success','Product updated');
             return $this->redirectToRoute('product_index');
+        }elseif($form->isSubmitted()){
+            $this->addFlash('error','form not valid');
         }
 
         return $this->render('product/edit.html.twig', [
@@ -161,6 +169,7 @@ class ProductController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($product);
             $entityManager->flush();
+            $this->addFlash('success','Product deleted');
         }
 
         return $this->redirectToRoute('product_index');

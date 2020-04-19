@@ -24,6 +24,9 @@
         {% if is_granted('ROLE_ADMIN') %}
         <p> You're admin</p>
         {% endif %}
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <a href="{{ path('super_admin') }}">Super Admin page</a>
+        {% endif %}
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

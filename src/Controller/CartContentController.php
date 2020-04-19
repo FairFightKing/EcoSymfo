@@ -39,7 +39,10 @@ class CartContentController extends AbstractController
             $entityManager->persist($cartContent);
             $entityManager->flush();
 
+            $this->addFlash('success','created a new cart');
             return $this->redirectToRoute('cart_content_index');
+        } elseif($form->isSubmitted()){
+            $this->addFlash('error','form is not valid');
         }
 
         return $this->render('cart_content/new.html.twig', [
@@ -68,8 +71,10 @@ class CartContentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('success','Cart updated');
             return $this->redirectToRoute('cart_content_index');
+        } elseif ($form->isSubmitted()){
+            $this->addFlash('error','form not valid');
         }
 
         return $this->render('cart_content/edit.html.twig', [
@@ -87,6 +92,7 @@ class CartContentController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($cartContent);
             $entityManager->flush();
+            $this->addFlash('success','cart deleted');
         }
 
         return $this->redirectToRoute('cart_index');
