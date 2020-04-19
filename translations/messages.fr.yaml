@@ -88,3 +88,8 @@ register: 'enregistrer'
 Plain password: 'Mot de passe'
 Agree terms: 'termes'
 signin: 'se connecter'
+oops: 'oups'
+errorText: 'Une erreur est survenue, merci de réessayer ultérieurement.'
+403: "Pas le droit d'etre ici"
+404: 'Page non trouve'
+500: 'Ne fonctionne pas'

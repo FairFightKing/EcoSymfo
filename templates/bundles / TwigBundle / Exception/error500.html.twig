@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-	<h1>Oops</h1>
-	<p>Cette page ne fonctionne pas</p>
-	<p><a href="{{ path('landing') }}">Retour à l'accueil</a></p>
+	<h1>{{ 'oops'|trans }}</h1>
+	<p>{{ '403'|trans }}</p>
+	<p><a href="{{ path('landing') }}">{{ 'menu.homePage'|trans }}</a></p>
 {% endblock %}
