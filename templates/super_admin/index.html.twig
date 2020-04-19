@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SuperAdminController!{% endblock %}
+
+{% block body %}
+
+    <h2>All users ordered by newest</h2>
+    <ul>
+    {% for user in users %}
+        <li>{{ user.Email }}</li>
+    {% endfor %}
+    </ul>
+    <hr/>
+
+    <h2>All unpaid carts</h2>
+
+    <table border="1px">
+        <thead>
+        <tr>
+            <th>Owner</th>
+            <th>Id</th>
+            <th>Content</th>
+        </tr>
+        </thead>
+
+    {% for cart in unpaidCarts %}
+        <tbody>
+        <tr>
+            <td>{{ cart.User.Email }}</td>
+            <td>{{ cart.id }}</td>
+            <td>
+                {%  for products in cart.cartContents %}
+                    {{ products.product.Name }} : x{{ products.Quantity }}<br>
+                    {% endfor %}
+            </td>
+        </tr>
+        </tbody>
+        </table>
+    {% endfor %}
+{% endblock %}
