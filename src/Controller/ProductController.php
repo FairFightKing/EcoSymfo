@@ -71,7 +71,8 @@ class ProductController extends AbstractController
     public function show(Product $product, Request $request, TranslatorInterface $translator): Response
     {
         $cartContent = new CartContent();
-        $form = $this->createForm(CartContentType::class, $cartContent);
+        // The form cannot exceed the product stock
+        $form = $this->createForm(CartContentType::class, $cartContent , ['stock' => $product->getStock()]);
         $entityManager = $this->getDoctrine()->getManager();
         if ($this->getUser()) {
             // Request the unpaid cart form the user
@@ -82,8 +83,11 @@ class ProductController extends AbstractController
                 $hasProductInUnpaidCart = $entityManager->getRepository(CartContent::class)->findOneBy(['Cart' => $cart, 'Product' => $product]);
                 // If we found the product inside the cart
                 if ($hasProductInUnpaidCart !== null) {
+                    // Save the intial value of quantity before creating the form
+                    $initialQuantity = $hasProductInUnpaidCart->getQuantity();
                     // Change form to update the Cart
-                    $form = $this->createForm(CartContentType::class, $hasProductInUnpaidCart);
+                    // Makd sure the form can add the remaining stock to its total
+                    $form = $this->createForm(CartContentType::class, $hasProductInUnpaidCart , ['stock' => $product->getStock() + $initialQuantity]);
                     $updateCart = true;
                 } else {
                     $updateCart = false;
@@ -97,6 +101,15 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // If the form was to update the cart
             if ($updateCart) {
+                // Calculate the total before having the product in the cart
+                $initialStock = $product->getStock() + $initialQuantity;
+                // Update the remaining stock
+                $remainingStock = $initialStock - $hasProductInUnpaidCart->getQuantity();
+                // Update the product with its new stock
+                $product->setStock($remainingStock);
+                $entityManager->persist($product);
+                $entityManager->flush();
+                // Update the CartContent
                 $this->getDoctrine()->getManager()->flush();
                 $this->addFlash('success', $translator->trans('flash.cartUpdate'));
             } else{
@@ -113,6 +126,11 @@ class ProductController extends AbstractController
                 $cartContent->setProduct($product);
                 // save the cart content
                 $entityManager->persist($cartContent);
+                $entityManager->flush();
+                // Update the new Stock of the Product
+                $remainingStock = $product->getStock() - $cartContent->getQuantity();
+                $product->setStock($remainingStock);
+                $entityManager->persist($product);
                 $entityManager->flush();
 
                 $this->addFlash('success', $translator->trans('flash.productAdd'));

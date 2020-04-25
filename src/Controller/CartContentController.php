@@ -32,14 +32,31 @@ class CartContentController extends AbstractController
             $this->addFlash('error', $translator->trans('flash.cartAlreadyPurchased'));
             return $this->redirectToRoute('cart_index');
         }
-        $form = $this->createForm(CartContentType::class, $cartContent);
+        // Save the intial value of quantity before creating the form
+        $initialQuantity = $cartContent->getQuantity();
+        // Makd sure the form can add the remaining stock to its total
+        $form = $this->createForm(CartContentType::class, $cartContent ,['stock' => $cartContent->getProduct()->getStock() + $cartContent->getQuantity()]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // update the cart content
+            // Calculate the total before having the product in the cart
+            $initialStock = $cartContent->getProduct()->getStock() + $initialQuantity;
+            // Update the remaining stock
+            $remainingStock = $initialStock - $cartContent->getQuantity();
+            dump($remainingStock);
+            dump($initialStock);
+            dump($initialQuantity);
+            dump($cartContent->getQuantity());
+            // Update the product with its new stock
+            $cartContent->getProduct()->setStock($remainingStock);
+            $entityManager = $this->getDoctrine()->getManager();
+            // update the product
+            $entityManager->persist($cartContent->getProduct());
+            $entityManager->flush();
+            // Update the CartContent
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash('success',$translator->trans('flash.cartUpdate'));
-            return $this->redirectToRoute('cart_content_index');
+            return $this->redirectToRoute('cart_content_edit',['id' => $cartContent->getId()] );
         } elseif ($form->isSubmitted()){
             $this->addFlash('error',$translator->trans('flash.formNotValid'));
         }

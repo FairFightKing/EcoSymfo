@@ -6,6 +6,7 @@
     <h1>{{ 'cart.edit'|trans }}</h1>
     <h2>{{ 'edit'|trans }} {{ 'product'|trans}} {{ cart_content.product.name }}</h2>
     <p>{{ 'price'|trans }} : {{ cart_content.product.price }} euros</p>
+    <p>{{ 'Stock'|trans }} : {{ cart_content.product.Stock }}</p>
     <p>{{ 'Product Picture'|trans }} : <img src="{{ asset('/uploads/'~cart_content.product.picture) }}" alt="" width="124px"></p>
     <hr/>
 
