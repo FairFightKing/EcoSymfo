@@ -21,6 +21,7 @@ Product:
   added: 'Produit ajouter au panier'
   delete: 'Supprimer ce produit'
   edit: 'Modifier ce produit'
+  cartUpdate: 'Ce produit est dans votre panier, modifier sa quantite ou le supprimer du panier'
 
 cart:
   name: 'Panier'

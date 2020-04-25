@@ -72,34 +72,56 @@ class ProductController extends AbstractController
     {
         $cartContent = new CartContent();
         $form = $this->createForm(CartContentType::class, $cartContent);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+        $entityManager = $this->getDoctrine()->getManager();
+        if ($this->getUser()) {
             // Request the unpaid cart form the user
             $cart = $entityManager->getRepository(Cart::class)->findOneBy(['user' => $this->getUser(), 'Status' => false]);
-            // If theres none, create a new empty one
-            if ($cart === null && $this->getUser()){
-                $cart = new Cart();
-                $cart->setUser($this->getUser());
-                $entityManager->persist($cart);
-                $entityManager->flush();
+            // Verify that we got a cart
+            if ($cart !== null) {
+                // Request the product inside that unpaidcart
+                $hasProductInUnpaidCart = $entityManager->getRepository(CartContent::class)->findOneBy(['Cart' => $cart, 'Product' => $product]);
+                // If we found the product inside the cart
+                if ($hasProductInUnpaidCart !== null) {
+                    // Change form to update the Cart
+                    $form = $this->createForm(CartContentType::class, $hasProductInUnpaidCart);
+                    $updateCart = true;
+                } else {
+                    $updateCart = false;
+                }
             }
-            // Create a new row with the corresponding fields
-            $cartContent->setCart($cart);
-            $cartContent->setAddedAt(new \DateTime());
-            $cartContent->setProduct($product);
-            // save the cart content
-            $entityManager->persist($cartContent);
-            $entityManager->flush();
+        }
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ($hasProductInUnpaidCart !== null) {
+                $this->getDoctrine()->getManager()->flush();
+            } else{
+                // If theres none, create a new empty one
+                if ($cart === null && $this->getUser()){
+                    $cart = new Cart();
+                    $cart->setUser($this->getUser());
+                    $entityManager->persist($cart);
+                    $entityManager->flush();
+                }
+                // Create a new row with the corresponding fields
+                $cartContent->setCart($cart);
+                $cartContent->setAddedAt(new \DateTime());
+                $cartContent->setProduct($product);
+                // save the cart content
+                $entityManager->persist($cartContent);
+                $entityManager->flush();
 
-            $this->addFlash('success', $translator->trans('flash.productAdd'));
+                $this->addFlash('success', $translator->trans('flash.productAdd'));
+            }
+            $this->addFlash('success', $translator->trans('flash.cartUpdate'));
+
         } elseif ($form->isSubmitted()) {
             $this->addFlash('error', $translator->trans('flash.formNotValid'));
         }
 
         return $this->render('product/show.html.twig', [
             'product' => $product,
+            'updateCart' => $updateCart,
+            'cart_content' => $hasProductInUnpaidCart,
             'form' => $form->createView()
         ]);
     }

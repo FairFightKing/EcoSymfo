@@ -35,8 +35,15 @@
     </table>
 
     {% if is_granted('ROLE_USER') %}
-        <h2>{{ 'cart.add'|trans }}</h2>
-        {{ include('product/_form.html.twig',{'button_label': 'Product.add'|trans}) }}
+        {% if updateCart %}
+            <h2>{{ 'Product.cartUpdate'|trans }}</h2>
+            {{ include('product/_form.html.twig',{'button_label': 'menu.update'|trans}) }}
+            {{ include('cart_content/_delete_form.html.twig') }}
+
+        {% else %}
+                <h2>{{ 'cart.add'|trans }}</h2>
+            {{ include('product/_form.html.twig',{'button_label': 'Product.add'|trans}) }}
+        {% endif %}
     {% endif %}
     <hr/>
     {% if is_granted('ROLE_ADMIN') %}

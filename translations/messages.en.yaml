@@ -21,6 +21,7 @@ Product:
   added: 'product added to the cart'
   delete: 'Delete that product'
   edit: 'Edit that product'
+  cartUpdate: 'This product is in your cart, update its quantity or delete it from the cart'
 
 cart:
   name: 'Cart'
