@@ -82,12 +82,12 @@ class Product
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->Price;
     }
 
-    public function setPrice(int $Price): self
+    public function setPrice(float $Price): self
     {
         $this->Price = $Price;
 
