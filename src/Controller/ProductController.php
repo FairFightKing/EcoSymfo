@@ -132,6 +132,8 @@ class ProductController extends AbstractController
      */
     public function delete(Request $request, Product $product, TranslatorInterface $translator): Response
     {
+        // Verification that only an admin can delete a product
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
             // delete the product
             $entityManager = $this->getDoctrine()->getManager();

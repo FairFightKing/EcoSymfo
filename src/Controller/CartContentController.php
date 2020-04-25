@@ -45,6 +45,8 @@ class CartContentController extends AbstractController
      */
     public function delete(Request $request, CartContent $cartContent, TranslatorInterface $translator): Response
     {
+        // Verification that only a user can delete a cart content
+        $this->denyAccessUnlessGranted('ROLE_USER');
         if ($this->isCsrfTokenValid('delete'.$cartContent->getId(), $request->request->get('_token'))) {
             // delete the cart
             $entityManager = $this->getDoctrine()->getManager();

@@ -38,5 +38,5 @@ security:
     access_control:
         - { path: ^/.*/superadmin, roles: ROLE_SUPER_ADMIN }
         - { path: ^/.*/user, roles: ROLE_USER }
-        - { path: ^/.*/cart/content, roles: ROLE_USER }
         - { path: ^/.*/cart, roles: ROLE_USER }
+        - { path: ^/.*/product/.*/edit, roles: ROLE_ADMIN }
