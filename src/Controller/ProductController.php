@@ -95,6 +95,7 @@ class ProductController extends AbstractController
             // If the form was to update the cart
             if ($updateCart) {
                 $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', $translator->trans('flash.cartUpdate'));
             } else{
                 // If theres none, create a new empty one
                 if ($cart === null && $this->getUser()){
@@ -113,7 +114,6 @@ class ProductController extends AbstractController
 
                 $this->addFlash('success', $translator->trans('flash.productAdd'));
             }
-            $this->addFlash('success', $translator->trans('flash.cartUpdate'));
 
         } elseif ($form->isSubmitted()) {
             $this->addFlash('error', $translator->trans('flash.formNotValid'));
