@@ -89,6 +89,9 @@ class ProductController extends AbstractController
                     $updateCart = false;
                 }
             }
+        } else {
+            $updateCart = false;
+            $hasProductInUnpaidCart = null;
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
