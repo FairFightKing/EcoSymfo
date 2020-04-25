@@ -72,8 +72,14 @@ class CartController extends AbstractController
         // Verification that only a user can delete a cart
         $this->denyAccessUnlessGranted('ROLE_USER');
         if ($this->isCsrfTokenValid('delete'.$cart->getId(), $request->request->get('_token'))) {
-            // remove the cart
             $entityManager = $this->getDoctrine()->getManager();
+            // Update every product affected by the deletion of the Cart
+            foreach ($cart->getCartContents() as $product){
+                $updatedProduct = $product->getProduct()->setStock($product->getQuantity() + $product->getProduct()->getStock());
+                $entityManager->persist($updatedProduct);
+                $entityManager->flush();
+            }
+            // remove the cart
             $entityManager->remove($cart);
             $entityManager->flush();
             $this->addFlash('success',$translator->trans('flash.formNotValid'));
@@ -98,9 +104,11 @@ class CartController extends AbstractController
                 $entityManager->persist($cart);
                 $entityManager->flush();
                 // Update the quantity of the different Products
+                // Go through every Product inside the cart
                 foreach ($cart->getCartContents() as $product){
                   $quantity = $product->getQuantity();
                   $stock = $product->getProduct()->getStock();
+                  // Set the new stock of that product
                   $UpdatedProduct = $product->getProduct()->setStock($stock - $quantity);
                   $entityManager->persist($UpdatedProduct);
                   $entityManager->flush();

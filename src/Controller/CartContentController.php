@@ -80,6 +80,11 @@ class CartContentController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$cartContent->getId(), $request->request->get('_token'))) {
             // delete the cart
             $entityManager = $this->getDoctrine()->getManager();
+            // Update the product affected by the deletion of the CartContent
+            $updatedProduct = $cartContent->getProduct()->setStock($cartContent->getQuantity() + $cartContent->getProduct()->getStock());
+            $entityManager->persist($updatedProduct);
+            $entityManager->flush();
+            // Remove the cartContent
             $entityManager->remove($cartContent);
             $entityManager->flush();
             $this->addFlash('success',$translator->trans('flash.cartDeleted'));
