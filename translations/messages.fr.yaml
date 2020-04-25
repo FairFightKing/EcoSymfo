@@ -57,6 +57,8 @@ flash:
   purchaseOk: 'Vous avez bien acheter le panier'
   cartAlreadyPurchased: 'Ce panier est deja payer'
   notACart: "ce panier n'existe pas"
+  notUrCart: "Ce n'est pas votre panier"
+  notUrAcc: "Vous ne pouvez pas avoir acces aux autres compte que le votre"
 name: 'Nom'
 Name: 'Nom'
 picture: 'Photo'

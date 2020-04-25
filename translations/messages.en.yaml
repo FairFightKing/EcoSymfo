@@ -57,6 +57,8 @@ flash:
   purchaseOk: 'Purchase went well'
   cartAlreadyPurchased: 'Your cart has already been purchased'
   notACart: 'This cart does not exist'
+  notUrCart: 'This is not your cart'
+  notUrAcc: "You can't access Profile that aren't yours"
 name: 'Name'
 Name: 'Name'
 picture: 'picture'

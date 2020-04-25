@@ -42,34 +42,21 @@ class CartController extends AbstractController
     /**
      * @Route("/{id}", name="cart_show", methods={"GET"})
      */
-    public function show(Cart $cart): Response
+    public function show(Cart $cart = null, TranslatorInterface $translator): Response
     {
-        return $this->render('cart/show.html.twig', [
-            'cart' => $cart,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}/edit", name="cart_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Cart $cart, TranslatorInterface $translator): Response
-    {
-        $form = $this->createForm(CartType::class, $cart);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            // update the cart
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success',$translator->trans('flash.cartUpdated'));
+        if ($cart) {
+            // User will only access his carts
+            if ($cart->getUser() !== $this->getUser() && !$this->isGranted('ROLE_SUPER_ADMIN')) {
+                $this->addFlash('error', $translator->trans('flash.notUrCart'));
+                return $this->redirectToRoute('cart_index');
+            }
+            return $this->render('cart/show.html.twig', [
+                'cart' => $cart,
+            ]);
+        } else {
+            $this->addFlash('error', $translator->trans('cart.empty'));
             return $this->redirectToRoute('cart_index');
-        } elseif ($form->isSubmitted()){
-            $this->addFlash('error',$translator->trans('flash.formNotValid'));
         }
-
-        return $this->render('cart/edit.html.twig', [
-            'cart' => $cart,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
@@ -77,6 +64,11 @@ class CartController extends AbstractController
      */
     public function delete(Request $request, Cart $cart, TranslatorInterface $translator): Response
     {
+        // User will only have access to the same cart as his account carts
+        if ($cart->getUser() !== $this->getUser() && !$this->isGranted('ROLE_SUPER_ADMIN')) {
+            $this->addFlash('error', $translator->trans('flash.notUrCart'));
+            return $this->redirectToRoute('cart_index');
+        }
         // Verification that only a user can delete a cart
         $this->denyAccessUnlessGranted('ROLE_USER');
         if ($this->isCsrfTokenValid('delete'.$cart->getId(), $request->request->get('_token'))) {
@@ -97,7 +89,7 @@ class CartController extends AbstractController
     {
         // If a cart exist and if it unpaid
         if ($cart) {
-            if ($cart->getStatus() === false) {
+            if ($cart->getStatus() === false && $cart->getUser() === $this->getUser()) {
                 $entityManager = $this->getDoctrine()->getManager();
                 // change the status of the cart to be paid and the time its been paid and update database
                 $cart->setStatus(true);

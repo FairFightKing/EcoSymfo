@@ -23,7 +23,7 @@ class UserController extends AbstractController
     {
         // User will only have access to the same ID as his acc id
         if ($user !== $this->getUser()) {
-            $this->addFlash('error', 'This is not your user page');
+            $this->addFlash('error', $translator->trans('flash.notUrAcc'));
             return $this->redirectToRoute('product_index');
         }
 

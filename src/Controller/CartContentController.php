@@ -22,6 +22,15 @@ class CartContentController extends AbstractController
      */
     public function edit(Request $request, CartContent $cartContent, TranslatorInterface $translator): Response
     {
+        // User will only access his carts
+        if ($cartContent->getCart()->getUser() !== $this->getUser() && !$this->isGranted('ROLE_SUPER_ADMIN')) {
+            $this->addFlash('error', $translator->trans('flash.notUrCart'));
+            return $this->redirectToRoute('cart_index');
+        }
+        if ($cartContent->getCart()->getStatus() === true){
+            $this->addFlash('error', $translator->trans('flash.cartAlreadyPurchased'));
+            return $this->redirectToRoute('cart_index');
+        }
         $form = $this->createForm(CartContentType::class, $cartContent);
         $form->handleRequest($request);
 
@@ -45,8 +54,11 @@ class CartContentController extends AbstractController
      */
     public function delete(Request $request, CartContent $cartContent, TranslatorInterface $translator): Response
     {
-        // Verification that only a user can delete a cart content
-        $this->denyAccessUnlessGranted('ROLE_USER');
+        // User will only access his carts
+        if ($cartContent->getCart()->getUser() !== $this->getUser()) {
+            $this->addFlash('error', $translator->trans('flash.notUrCart'));
+            return $this->redirectToRoute('cart_index');
+        }
         if ($this->isCsrfTokenValid('delete'.$cartContent->getId(), $request->request->get('_token'))) {
             // delete the cart
             $entityManager = $this->getDoctrine()->getManager();

@@ -4,6 +4,10 @@
 
 {% block body %}
     <h1>{{ 'cart.edit'|trans }}</h1>
+    <h2>{{ 'edit'|trans }} {{ 'product'|trans}} {{ cart_content.product.name }}</h2>
+    <p>{{ 'price'|trans }} : {{ cart_content.product.price }} euros</p>
+    <p>{{ 'Product Picture'|trans }} : <img src="{{ asset('/uploads/'~cart_content.product.picture) }}" alt="" width="124px"></p>
+    <hr/>
 
     {{ include('cart_content/_form.html.twig', {'button_label': 'menu.update'|trans}) }}
 

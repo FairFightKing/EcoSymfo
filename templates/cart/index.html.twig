@@ -28,6 +28,7 @@
 
                 <td>
                     <a href="{{ path('product_show', {'id': products.product.id}) }}">{{ 'show'|trans }}</a>
+                    <a href="{{ path('cart_content_edit', {'id': products.id}) }}">{{ 'edit'|trans }}</a>
                     {{ include('cart_content/_delete_form.html.twig', {'cart_content' : products}) }}
                 </td>
             </tr>

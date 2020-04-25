@@ -36,7 +36,7 @@
 
     {% if is_granted('ROLE_USER') %}
         <h2>{{ 'cart.add'|trans }}</h2>
-        {{ include('product/_form.html.twig') }}
+        {{ include('product/_form.html.twig',{'button_label': 'Product.add'|trans}) }}
     {% endif %}
     <hr/>
     {% if is_granted('ROLE_ADMIN') %}

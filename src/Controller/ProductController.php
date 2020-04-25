@@ -28,7 +28,7 @@ class ProductController extends AbstractController
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid() && $this->isGranted('ROLE_ADMIN')) {
             $picture = $form->get('Picture')->getData();
             // this condition is needed because the 'Picture' field is not required
             // so the image file must be processed only when a file is uploaded
@@ -109,6 +109,7 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product, TranslatorInterface $translator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
