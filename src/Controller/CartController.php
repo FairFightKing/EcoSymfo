@@ -97,6 +97,14 @@ class CartController extends AbstractController
                 // save the changes
                 $entityManager->persist($cart);
                 $entityManager->flush();
+                // Update the quantity of the different Products
+                foreach ($cart->getCartContents() as $product){
+                  $quantity = $product->getQuantity();
+                  $stock = $product->getProduct()->getStock();
+                  $UpdatedProduct = $product->getProduct()->setStock($stock - $quantity);
+                  $entityManager->persist($UpdatedProduct);
+                  $entityManager->flush();
+                }
                 $this->addFlash('success', $translator->trans('flash.purchaseOk'));
 
             } else {
