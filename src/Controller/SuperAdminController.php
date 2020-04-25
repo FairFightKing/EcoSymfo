@@ -14,6 +14,8 @@ class SuperAdminController extends AbstractController
      */
     public function index()
     {
+        // Just to make sure noone else get here
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN');
         $entityManager = $this->getDoctrine()->getManager();
         // Request all the Users and ordered by ID wich the higher equal the sooner
         $users = $entityManager->getRepository(User::class)->findBy([],['id' => 'DESC']);

@@ -92,7 +92,8 @@ class ProductController extends AbstractController
         }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if ($hasProductInUnpaidCart !== null) {
+            // If the form was to update the cart
+            if ($updateCart) {
                 $this->getDoctrine()->getManager()->flush();
             } else{
                 // If theres none, create a new empty one
@@ -131,6 +132,7 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product, TranslatorInterface $translator): Response
     {
+        // Only admins can edit a product
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);

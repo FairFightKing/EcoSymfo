@@ -27,6 +27,7 @@ class CartContentController extends AbstractController
             $this->addFlash('error', $translator->trans('flash.notUrCart'));
             return $this->redirectToRoute('cart_index');
         }
+        // Can only edit unpaid cart
         if ($cartContent->getCart()->getStatus() === true){
             $this->addFlash('error', $translator->trans('flash.cartAlreadyPurchased'));
             return $this->redirectToRoute('cart_index');
