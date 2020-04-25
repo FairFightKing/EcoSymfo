@@ -21,6 +21,11 @@ class UserController extends AbstractController
      */
     public function index(User $user = null, Request $request, GuardAuthenticatorHandler $guardHandler, AppAuthAuthenticator $authenticator, TranslatorInterface $translator)
     {
+        // User will only have access to the same ID as his acc id
+        if ($user !== $this->getUser()) {
+            $this->addFlash('error', 'This is not your user page');
+            return $this->redirectToRoute('product_index');
+        }
 
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
