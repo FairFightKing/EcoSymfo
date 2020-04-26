@@ -60,6 +60,7 @@ flash:
   notACart: "ce panier n'existe pas"
   notUrCart: "Ce n'est pas votre panier"
   notUrAcc: "Vous ne pouvez pas avoir acces aux autres compte que le votre"
+  deleteCart: 'Votre panier est supprimer'
 name: 'Nom'
 Name: 'Nom'
 picture: 'Photo'

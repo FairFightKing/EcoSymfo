@@ -60,6 +60,7 @@ flash:
   notACart: 'This cart does not exist'
   notUrCart: 'This is not your cart'
   notUrAcc: "You can't access Profile that aren't yours"
+  deleteCart: 'Your cart is deleted'
 name: 'Name'
 Name: 'Name'
 picture: 'picture'

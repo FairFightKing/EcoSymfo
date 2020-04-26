@@ -43,10 +43,6 @@ class CartContentController extends AbstractController
             $initialStock = $cartContent->getProduct()->getStock() + $initialQuantity;
             // Update the remaining stock
             $remainingStock = $initialStock - $cartContent->getQuantity();
-            dump($remainingStock);
-            dump($initialStock);
-            dump($initialQuantity);
-            dump($cartContent->getQuantity());
             // Update the product with its new stock
             $cartContent->getProduct()->setStock($remainingStock);
             $entityManager = $this->getDoctrine()->getManager();

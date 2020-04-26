@@ -92,6 +92,9 @@ class ProductController extends AbstractController
                 } else {
                     $updateCart = false;
                 }
+            } else{
+                $updateCart = false;
+                $hasProductInUnpaidCart = null;
             }
         } else {
             $updateCart = false;

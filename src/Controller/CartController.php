@@ -78,11 +78,14 @@ class CartController extends AbstractController
                 $updatedProduct = $product->getProduct()->setStock($product->getQuantity() + $product->getProduct()->getStock());
                 $entityManager->persist($updatedProduct);
                 $entityManager->flush();
+                // remove the cartContent
+                $entityManager->remove($product);
+                $entityManager->flush();
             }
             // remove the cart
             $entityManager->remove($cart);
             $entityManager->flush();
-            $this->addFlash('success',$translator->trans('flash.formNotValid'));
+            $this->addFlash('success',$translator->trans('flash.deleteCart'));
         }
 
         return $this->redirectToRoute('cart_index');

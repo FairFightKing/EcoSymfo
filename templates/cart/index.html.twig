@@ -39,7 +39,9 @@
             {% if cart.Cartcontents is not empty %}
                 <p>{{ 'cart.price'|trans}} : {{ total }} euros</p>
             <a href="{{ path('cart_purchase', {'id': cart.id}) }}">{{ 'cart.purchase'|trans }}</a>
-                {% else %}
+                {{ include('cart/_delete_form.html.twig', {'id' : cart.id}) }}
+
+            {% else %}
                     <tr>
                         <td colspan="4">{{ 'cart.empty'|trans }}</td>
                     </tr>
