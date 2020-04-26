@@ -137,6 +137,8 @@ class ProductController extends AbstractController
                 $entityManager->flush();
 
                 $this->addFlash('success', $translator->trans('flash.productAdd'));
+                // Redirect to update the form
+                return $this->redirectToRoute('product_show', ['id' => $product->getId()]);
             }
 
         } elseif ($form->isSubmitted()) {
