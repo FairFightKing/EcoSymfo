@@ -24,7 +24,7 @@
                 <td>{{ product.Name }}</td>
                 <td>{{ product.Description }}</td>
                 <td>{{ product.Price }} euros</td>
-                <td>{{ product.Stock }}</td>
+                <td>{{ product.Stock == 0 ? 'outOfStock'|trans : product.Stock  }}</td>
                 <td><img src="{{ asset('/uploads/'~product.picture) }}" alt="" width="124px"></td>
                 <td>
                     <a href="{{ path('product_show', {'id': product.id}) }}">{{ 'show'|trans }}</a>

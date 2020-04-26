@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <th>{{ 'stock'|trans }}</th>
-                <td>{{ product.Stock }}</td>
+                <td>{{ product.Stock == 0 ? 'outOfStock'|trans : product.Stock  }}</td>
             </tr>
             <tr>
                 <th>{{ 'picture'|trans }}</th>
